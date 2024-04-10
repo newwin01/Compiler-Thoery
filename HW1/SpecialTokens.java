@@ -60,13 +60,13 @@ public class SpecialTokens {
 
         //Statement Terminator
         else if (tempChar.equals(';')) {
-            return "Addition Operator";
+            return "Statement Terminator";
         }
 
         //Puncation
 
         else if (tempChar.equals(',')) {
-            return "Punctation Token";
+            return "Punctation Token, Comma";
         }
 
         //Logical Operator

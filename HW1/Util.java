@@ -4,7 +4,6 @@ import java.io.IOException;
 
 public class Util {
 
-   
 
     public static String readFile(String filePath) {
         StringBuilder fileContents = new StringBuilder();

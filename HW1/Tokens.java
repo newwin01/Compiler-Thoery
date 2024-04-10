@@ -44,5 +44,7 @@ public class Tokens {
          Collections.unmodifiableList(DIGIT_List); 
      }
     
+     public static final List<String> OPERATORS = 
+        Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==", "+", "-", "*", "/", "(", ")", ";", ",", "&&", "||");
  
 }

@@ -36,7 +36,7 @@ public class DFA {
     }
 
     @SuppressWarnings("unchecked")
-    public int findInputChar(Character inputChar) {
+    private int findInputChar(Character inputChar) {
 
         // System.out.println(inputChar);
 
