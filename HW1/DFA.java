@@ -28,6 +28,8 @@ public class DFA {
 
         int result;
 
+        // System.out.println(state + "," + inputChar);
+
         result = transitionTable[state][inputChar];
      
         return result;
@@ -36,12 +38,11 @@ public class DFA {
     @SuppressWarnings("unchecked")
     public int findInputChar(Character inputChar) {
 
+        // System.out.println(inputChar);
+
         for (int i = 0 ; i < transitionRow.size() ; i++) {
 
-            System.out.println(inputChar);
-
             Object tempTransitionRow = transitionRow.get(i);
-            System.out.println(tempTransitionRow);
 
             if ( tempTransitionRow instanceof Character) {
                 Character tranisitionChar = (Character)tempTransitionRow;
@@ -76,7 +77,7 @@ public class DFA {
 
             if (inputChar == -1) return false; //Not in the state, invalid token
 
-            state = doTransition(state, i);
+            state = doTransition(state, inputChar);
 
             if (state == -1) return false; //going to error state, invalid token
         }
