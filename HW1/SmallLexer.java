@@ -12,8 +12,14 @@ public class SmallLexer{
 
 
     public static void main(String[] args) {
+
+        if (args.length == 0 ) {
+            System.err.println("Please put file Path");   
+            System.exit(-1);
+        }
     
         String fileContents = Util.readFile(args[0]);
+
 
         if (fileContents == null) {
             System.err.println("File Not Found Error");
@@ -30,6 +36,7 @@ public class SmallLexer{
     public void splitIntoToken(String fileContents) {
 
         String[] fileLine = fileContents.split("\n");
+
         String types;
         
         for (String line : fileLine) {
@@ -48,6 +55,7 @@ public class SmallLexer{
 
             }
         }
+
         Util.print(tokensList, typesList);
     }
 

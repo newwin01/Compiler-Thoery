@@ -30,7 +30,19 @@ public class Util {
 
             if ( ((Character)line.charAt(i)).equals('\"') ) {
 
+                if ( line.indexOf('\"', i+1) == -1 ) {
+
+                    tokens = line.substring(i);
+
+                    if (tokens.length() != 0)
+                        tokensList.add(tokens);
+                        
+                    tokens = "";
+                    break;
+                }
+
                 tokens = line.substring(i, line.indexOf('\"', i+1) + 1);
+                
                 i = line.indexOf('\"', i+1);
 
                 if (tokens.length() != 0)
