@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SmallLexer{
 
@@ -14,7 +13,12 @@ public class SmallLexer{
 
     public static void main(String[] args) {
     
-        String fileContents = Util.readFile("testInputs_Scanner/Input3.txt");
+        String fileContents = Util.readFile(args[0]);
+
+        if (fileContents == null) {
+            System.err.println("File Not Found Error");
+            System.exit(-1);
+        }
 
         SmallLexer smallLexer = new SmallLexer();
         smallLexer.predefiningState();
@@ -26,97 +30,25 @@ public class SmallLexer{
     public void splitIntoToken(String fileContents) {
 
         String[] fileLine = fileContents.split("\n");
+        String types;
         
         for (String line : fileLine) {
 
-            line = line.trim();
+            ArrayList<String> tokenList = Util.getTokens(line);
 
-            String tokens = "";
-            String types;
-            for (int i = 0 ; i < line.length() ; i++) {
+            for (String token : tokenList) {
 
+                tokensList.add(token);
 
-                if ( ((Character)line.charAt(i)).equals('\"') ) {
-
-                    tokens = line.substring(i, line.indexOf('\"', i+1) + 1);
-
-                    types = determineState(tokens);
-
-                    i = line.indexOf('\"', i+1);
-
-                    if (types != null) {
-                        tokensList.add(tokens);
-                        typesList.add(types);
-                    }
-                    tokens = "";
-
-                }
-
-                else if ( ((Character)line.charAt(i)).equals('-') ) {
-
-                    if ( ( (Character)line.charAt(i+1)).equals('-') ) {
-
-                        tokens = line.substring(i);
-                        types = determineState(tokens);
- 
-                        tokensList.add(tokens);
-                        typesList.add(types);
-
-                        tokens = "";
-                        break;
-
-                    }                    
-
-                } else if ( ((Character)line.charAt(i)).equals(' ')) {
-
-                    types = determineState(tokens);
-
-                    if (types != null) {
-                        tokensList.add(tokens);
-                        typesList.add(types);
-                    }
-
-                    tokens = "";
-
-                } else if (  Tokens.OPERATORS.contains( String.valueOf(line.charAt(i)) ) ) {
-
-                    types = determineState(tokens);
-
-                    if (types != null) {
-                        tokensList.add(tokens);
-                        typesList.add(types);
-                    }
-
-                    types = SpecialTokens.getSpecialTokens( String.valueOf(line.charAt(i)) );
-
-                    tokensList.add( String.valueOf(line.charAt(i)) );
-                    typesList.add(types);
-
-                    tokens = "";
-
-                } else {
-                    tokens = tokens + line.charAt(i);
-                }
-
-            }
-
-            types = determineState(tokens);
-
-            if (types != null) {
-                tokensList.add(tokens);
+                if (Tokens.OPERATORS.contains(token))
+                    types = SpecialTokens.getSpecialTokens(token);
+                else 
+                    types = determineState(token);
                 typesList.add(types);
+
             }
-
         }
-
-
-        int i = 0;
-        for (String line : tokensList) {
-            System.out.print(line + "\t");
-            System.out.println(typesList.get(i));
-            i++;
-        }
-
+        Util.print(tokensList, typesList);
     }
 
 
@@ -135,15 +67,19 @@ public class SmallLexer{
             
             if (numberLiteralDFA.validateToken(token))
                 return "Number Literal";
+            else 
+                return "Illegal ID starting with digit";
 
         } else if (  ((Character)token.charAt(0)).equals('$') || Tokens.ALPHABET_LIST.contains( ((Character)token.charAt(0)) )) {
 
             if (identifierDFA.validateToken(token) ) 
 
-                if (SymbolTable.symbolTableHashMap.containsKey(token))
+                if ( SymbolTable.keywordHashMap.containsKey(token) )
                     return "Keyword";
-                else 
+                else {
+                    SymbolTable.addSymbolTable(token);
                     return "Identifier";
+                }
 
         }  else if (  ((Character)token.charAt(0)).equals('-')  ) {
 
@@ -152,7 +88,7 @@ public class SmallLexer{
 
         }
 
-        return "invalid identifier";
+        return "Illegal ID with wrong character";
     }
 
 

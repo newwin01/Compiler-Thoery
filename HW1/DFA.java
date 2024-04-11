@@ -28,8 +28,6 @@ public class DFA {
 
         int result;
 
-        // System.out.println(state + "," + inputChar);
-
         result = transitionTable[state][inputChar];
      
         return result;
@@ -37,8 +35,6 @@ public class DFA {
 
     @SuppressWarnings("unchecked")
     private int findInputChar(Character inputChar) {
-
-        // System.out.println(inputChar);
 
         for (int i = 0 ; i < transitionRow.size() ; i++) {
 

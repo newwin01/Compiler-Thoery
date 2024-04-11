@@ -2,19 +2,28 @@ import java.util.*;
 
 public class SymbolTable {
 
-    public static HashMap<String, Integer> symbolTableHashMap = new HashMap<>();
+    public static HashMap<String, Integer> keywordHashMap = new HashMap<>();
+    public static HashMap<String, Integer> identiferHashMap = new HashMap<>();
+    
 
     static {
-        symbolTableHashMap = new HashMap<>();
-        symbolTableHashMap.put("program", 1);
-        symbolTableHashMap.put("int", 2);
-        symbolTableHashMap.put("if", 3);
-        symbolTableHashMap.put("begin", 4);
-        symbolTableHashMap.put("print_line", 5);
-        symbolTableHashMap.put("end", 6);
-        symbolTableHashMap.put("else_if", 7);
-        symbolTableHashMap.put("else", 8);
-        symbolTableHashMap.put("while", 9);
+        keywordHashMap = new HashMap<>();
+        keywordHashMap.put("program", 1);
+        keywordHashMap.put("int", 2);
+        keywordHashMap.put("if", 3);
+        keywordHashMap.put("begin", 4);
+        keywordHashMap.put("print_line", 5);
+        keywordHashMap.put("end", 6);
+        keywordHashMap.put("else_if", 7);
+        keywordHashMap.put("else", 8);
+        keywordHashMap.put("while", 9);
+    }
+
+    public static void addSymbolTable(String tokens) {
+
+        if (!identiferHashMap.containsKey(tokens))
+            identiferHashMap.put(tokens, keywordHashMap.size()+1);
+
     }
 
 }
