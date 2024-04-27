@@ -35,7 +35,7 @@ public class SpecialTokens {
         } else if (tempChar.equals('!')) {
 
             if ( ((Character)token.charAt(1)).equals('=') )  
-                return "Equal Operator";
+                return "Not Equal Operator";
 
 
             // Arithmatic Operations
@@ -47,8 +47,6 @@ public class SpecialTokens {
             return "Multiplication Operator";
         } else if (tempChar.equals('/')) {
             return "Division Operator";
-        } else if (tempChar.equals('%')) {
-            return "Addition Operator";
         }
 
         //Paranthesis
