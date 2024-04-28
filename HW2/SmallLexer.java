@@ -7,8 +7,8 @@ public class SmallLexer{
     DFA numberLiteralDFA;
     DFA stringLiteralDFA;
 
-    ArrayList<String> tokensList = new ArrayList<>();
-    ArrayList<String> typesList = new ArrayList<>();
+    private ArrayList<String> tokensList = new ArrayList<>();
+    private ArrayList<String> typesList = new ArrayList<>();
 
     public ArrayList<String> getTokensList() {
         return tokensList;
@@ -42,11 +42,12 @@ public class SmallLexer{
             System.exit(-1);
         }
 
-        SmallLexer smallLexer = new SmallLexer();
-        smallLexer.predefiningState();
 
-        smallLexer.splitIntoToken(fileContents);
+       predefiningState();
 
+        splitIntoToken(fileContents);
+
+        Util.print(tokensList, typesList);
     }   
 
     public void splitIntoToken(String fileContents) {
@@ -57,9 +58,9 @@ public class SmallLexer{
         
         for (String line : fileLine) {
 
-            ArrayList<String> tokenList = Util.getTokens(line);
+            ArrayList<String> spliitTokenList = Util.getTokens(line);
 
-            for (String token : tokenList) {
+            for (String token : spliitTokenList) {
 
                 tokensList.add(token);
 
@@ -71,9 +72,8 @@ public class SmallLexer{
 
             }
         }
-
-        Util.print(tokensList, typesList);
-    }
+  
+    }   
 
 
     public String determineState(String token) {

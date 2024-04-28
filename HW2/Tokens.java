@@ -46,5 +46,10 @@ public class Tokens {
     
      public static final List<String> OPERATORS = 
         Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==", "+", "-", "*", "/", "(", ")", ";", ",", "&&", "||", "&", "|", "!");
+
+    public static final List<String> DECLAR_KEYWORD = 
+        Arrays.asList("int", "float", "double");
  
+    public static final List<String> COMPARISON_OPERATOR = 
+        Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==");
 }
