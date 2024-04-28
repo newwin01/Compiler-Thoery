@@ -6,10 +6,19 @@ import java.util.ArrayList;
 public class Util {
 
 
+    public static void printParsingFaile(String missingToken, int index) {
+
+        System.err.println("Parsing Failed");
+        System.out.println(missingToken + " not found " + index);
+        System.exit(-1);
+        
+    }
+
     public static void printParsingFaile(String missingToken) {
 
         System.err.println("Parsing Failed");
         System.out.println(missingToken + " not found");
+        System.exit(-1);
         
     }
 

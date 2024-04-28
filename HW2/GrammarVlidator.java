@@ -10,17 +10,14 @@ public class GrammarVlidator {
         this.tokenList = tokenList;
         this.typeList = typeList;
 
-        int index = 0;
         if ( this.typeList.contains("comment") ) { //remove comments
 
-            for (String type : this.typeList) {
+            for (int i = 0 ; i < tokenList.size() ; i++ ) {
 
-                if (type.equals("comment")) {
-                    this.tokenList.remove(index);
-                    this.typeList.remove(index);
+                if (this.typeList.get(i).equals("comment")) {
+                    this.tokenList.remove(i);
+                    this.typeList.remove(i);
                 }
-                index++;
-
             }
         }
 
@@ -30,89 +27,226 @@ public class GrammarVlidator {
 
         int index = 0;
 
-        String terminal = tokenList.get(index);
+        String terminal = tokenList.get(index++);
 
         if ( !terminal.equals("program") ) {
             Util.printParsingFaile("Program");
             return false;
         }
 
-        index++;
-        terminal = typeList.get(index);
+        terminal = typeList.get(index++);
 
-        if ( !terminal.equals("identifer")) {
+        if ( !terminal.equals("Identifier")) {
             Util.printParsingFaile("Identifier");
             return false;
         } 
 
-        //Validate nonterminal "block"
-        if ( blockValidator(index++, tokenList.size()) ) 
-            return false;
-
+        blockValidator(index);
         return true;
     }
 
 
-    public boolean blockValidator(int startIndex, int endIndex) {
+    public int blockValidator(int startIndex) {
 
-        String terminal = tokenList.get(startIndex);
+        int index = startIndex;
 
+        String terminal = tokenList.get(index++);
         if ( !terminal.equals("begin")) {
             Util.printParsingFaile("begin");
-            return false;
         }
 
-        terminal = tokenList.get(endIndex);
+        index = statementValidator(index);
 
-        if ( !terminal.equals("end")) {
+        if ( index == tokenList.size() ) {
             Util.printParsingFaile("end");
-            return false;
+        }
+        
+        terminal = tokenList.get(index);
+
+        System.out.println("Terminal:" + terminal);
+
+        if ( !terminal.equals("end") ) {
+            Util.printParsingFaile("end");
         }
 
-        if ( statementValidator(startIndex+1, endIndex-1) )
-            return false;
+        System.out.println("Done Yo Ho!");
 
-        return true;
+        return index;
     }        
 
-    public boolean statementValidator(int startIndex, int endIndex) { //need to make statmentprime validator for epsilon
+    public int statementValidator(int startIndex) { //need to make statmentprime validator for epsilon
 
         String terminal = tokenList.get(startIndex);
+        int index = startIndex;
 
+        while( !terminal.equals("end") && index != tokenList.size()) {
 
-        if ( Tokens.DECLAR_KEYWORD.contains(terminal)) {   
-            declarationValidator(startIndex+1);
-        } 
+            String type = typeList.get(index);
+  
+            if ( Tokens.DECLAR_KEYWORD.contains(terminal)) {   
+                index = declarationValidator(index+1);
+            } 
 
-        String type = typeList.get(startIndex);
-        if (type.equals("Identifer")) {
-            declarationValidator(startIndex);
+            else if (type.equals("Identifier")) {
+                index = declarationValidator(index);
+            }
+    
+            else if (terminal.equals("if")) {
+                index = conditionalStatement(index);
+            }
+    
+            else if (terminal.equals("print_line")) {
+                index = printStatmentValidator(index);
+            } 
+            
+            else {
+                Util.printParsingFaile("end");
+            }
+
+            if (index == tokenList.size()) {
+                Util.printParsingFaile("end");
+            }
+
+            terminal = tokenList.get(index);
+            System.err.println("Terminal " + terminal);
         }
 
-        if (terminal.equals("if")) {
-            //if statement
-        }
-
-        if (terminal.equals("print_line")) {
-            //print_statement
-        }
-
-        return true;
+        return index;
 
     }
 
-    public boolean declarationValidator(int startIndex) { //starts with 
+    public int conditionalStatement(int startIndex) {
+
+        int index;
+
+        index = ifStatementValidator(startIndex);
+
+        if (index == tokenList.size()) {
+            Util.printParsingFaile("end");
+        }
+
+        String terminal = tokenList.get(index);
+
+        if ( terminal.equals("else_if") ) {
+            
+            index = elseIfStatementValidator(index);
+
+        }
+
+        if (index == tokenList.size()) {
+            Util.printParsingFaile("end");
+        }
+
+        terminal = tokenList.get(index);
+
+        if (terminal.equals("else") ) {
+            
+            index = elseStatementValidation(index);
+        }
+
+        return index;
+    }
+
+    public int elseStatementValidation(int startIndex) {
+
+        int index = startIndex + 1;
+
+        System.out.println("Index: " + index);
+
+        return blockValidator(index) + 1;
+
+    }
+
+    public int elseIfStatementValidator(int startIndex) {
+
+        int index = startIndex;
+
+        String terminal = tokenList.get(index++);
+
+        if ( !terminal.equals("else_if") ) {
+            Util.printParsingFaile("if");
+        } 
+
+        terminal = tokenList.get(index++);
+        if ( !terminal.equals("(") ) {
+            Util.printParsingFaile("(");
+        }  
+
+        terminal = typeList.get(index++); //can be identifer or assignment
+        if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
+            Util.printParsingFaile("Identifer or Literal");
+        }
+
+        terminal = tokenList.get(index++); //can be identifer or assignment
+        if ( ! ( Tokens.COMPARISON_OPERATOR.contains(terminal) ) ) {
+            Util.printParsingFaile("Comparison Operator");
+        }
+        
+        terminal = typeList.get(index++); //can be identifer or assignment
+        if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
+            Util.printParsingFaile("Identifer or Literal");
+        }
+
+        terminal = tokenList.get(index++);
+        if ( !terminal.equals(")") ) {
+            Util.printParsingFaile(")");
+        } 
+
+        return blockValidator(index) + 1;
+    }
+    
+    public int ifStatementValidator(int startIndex) {
+
+        int index = startIndex;
+
+        String terminal = tokenList.get(index++);
+        if ( !terminal.equals("if") ) {
+            Util.printParsingFaile("if");
+        } 
+
+        terminal = tokenList.get(index++);
+        if ( !terminal.equals("(") ) {
+            Util.printParsingFaile("(");
+        }  
+
+        terminal = typeList.get(index++); //can be identifer or assignment
+        if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
+            Util.printParsingFaile("Identifer or Literal");
+        }
+
+        terminal = tokenList.get(index++); //can be identifer or assignment
+        if ( ! ( Tokens.COMPARISON_OPERATOR.contains(terminal) ) ) {
+            Util.printParsingFaile("Comparison Operator");
+        }
+        
+        terminal = typeList.get(index++); //can be identifer or assignment
+        if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
+            Util.printParsingFaile("Identifer or Literal");
+        }
+
+        terminal = tokenList.get(index++);
+        if ( !terminal.equals(")") ) {
+            Util.printParsingFaile(")");
+        } 
+
+        return blockValidator(index) + 1;
+    }
+
+
+    public int declarationValidator(int startIndex) { //starts with 
 
         int index = startIndex;
         String terminal;
 
         do{
             terminal = typeList.get(index++);
+
             if (!terminal.equals("Identifier")){
-                Util.printParsingFaile("Identifier");
+                System.out.println(terminal);
+                Util.printParsingFaile("Identifier", index);
             }
 
-            terminal = tokenList.get(index++); 
+            terminal = tokenList.get(index++);
 
             if (terminal.equals(";")) { //only calling identifier is possible
                 break;
@@ -121,30 +255,57 @@ public class GrammarVlidator {
             if (!terminal.equals("=")) {
                 Util.printParsingFaile("Assignment Operator");
             }
-            terminal = typeList.get(index++); //can be identifer or assignment
-            if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
-                System.out.println(terminal);
-                Util.printParsingFaile("Identifer or Literal");
+
+            while(true) {
+                terminal = typeList.get(index++); //can be identifer or assignment
+                if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
+                    Util.printParsingFaile("Identifer or Number Literal");
+                }
+
+                System.out.println( "TokenList:" +  tokenList.get(index) );
+                if ( Tokens.ARTH_OPERATORS.contains(tokenList.get(index)) ) {
+                    index++;
+                } else {
+                    break;
+                }
             }
-        } while( tokenList.get(index++).equals(";") );
+            
+            
+        } while( !tokenList.get(index++).equals(";") && index != tokenList.size() );
 
-        return true;
+        return index;
     }
 
-    public boolean ifStatementValidator(int startIndex, int endIndex) {
-        return true;
-    }
-
-    public boolean printStatmentValidator(int startIndex, int endIndex) {
+    public int printStatmentValidator(int startIndex) {
 
         int index = startIndex;
-        String terminal = tokenList.get(index);
+        String terminal = tokenList.get(index++);
 
-        if (terminal.equals("print_line") ) {
-            
-        }
+        if ( !terminal.equals("print_line") ) {
+            Util.printParsingFaile("print_line");
+        } 
 
-        return true;
+        terminal = tokenList.get(index++);
+        if ( !terminal.equals("(") ) {
+            Util.printParsingFaile("(");
+        }   
+
+        terminal = typeList.get(index++);
+        if ( !terminal.equals("String Literal") ) {
+            Util.printParsingFaile("String Literal");
+        } 
+
+        terminal = tokenList.get(index++);
+        if ( !terminal.equals(")") ) {
+            Util.printParsingFaile(")");
+        } 
+
+        terminal = tokenList.get(index++);
+        if ( !terminal.equals(";") ) {
+            Util.printParsingFaile(";");
+        } 
+
+        return index;
 
     }
 
