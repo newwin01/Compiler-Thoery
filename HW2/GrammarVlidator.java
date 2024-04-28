@@ -63,18 +63,14 @@ public class GrammarVlidator {
         
         terminal = tokenList.get(index);
 
-        System.out.println("Terminal:" + terminal);
-
         if ( !terminal.equals("end") ) {
             Util.printParsingFaile("end");
         }
 
-        System.out.println("Done Yo Ho!");
-
         return index;
     }        
 
-    public int statementValidator(int startIndex) { //need to make statmentprime validator for epsilon
+    public int statementValidator(int startIndex) { 
 
         String terminal = tokenList.get(startIndex);
         int index = startIndex;
@@ -108,7 +104,7 @@ public class GrammarVlidator {
             }
 
             terminal = tokenList.get(index);
-            System.err.println("Terminal " + terminal);
+
         }
 
         return index;
@@ -151,8 +147,6 @@ public class GrammarVlidator {
 
         int index = startIndex + 1;
 
-        System.out.println("Index: " + index);
-
         return blockValidator(index) + 1;
 
     }
@@ -162,35 +156,39 @@ public class GrammarVlidator {
         int index = startIndex;
 
         String terminal = tokenList.get(index++);
-
-        if ( !terminal.equals("else_if") ) {
-            Util.printParsingFaile("if");
-        } 
-
-        terminal = tokenList.get(index++);
-        if ( !terminal.equals("(") ) {
-            Util.printParsingFaile("(");
-        }  
-
-        terminal = typeList.get(index++); //can be identifer or assignment
-        if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
-            Util.printParsingFaile("Identifer or Literal");
-        }
-
-        terminal = tokenList.get(index++); //can be identifer or assignment
-        if ( ! ( Tokens.COMPARISON_OPERATOR.contains(terminal) ) ) {
-            Util.printParsingFaile("Comparison Operator");
-        }
         
-        terminal = typeList.get(index++); //can be identifer or assignment
-        if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
-            Util.printParsingFaile("Identifer or Literal");
-        }
+        while ( terminal.equals("else_if") ) {
 
-        terminal = tokenList.get(index++);
-        if ( !terminal.equals(")") ) {
-            Util.printParsingFaile(")");
-        } 
+            if ( !terminal.equals("else_if") ) {
+                Util.printParsingFaile("if");
+            } 
+    
+            terminal = tokenList.get(index++);
+            if ( !terminal.equals("(") ) {
+                Util.printParsingFaile("(");
+            }  
+    
+            terminal = typeList.get(index++); //can be identifer or assignment
+            if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
+                Util.printParsingFaile("Identifer or Literal");
+            }
+    
+            terminal = tokenList.get(index++); //can be identifer or assignment
+            if ( ! ( Tokens.COMPARISON_OPERATOR.contains(terminal) ) ) {
+                Util.printParsingFaile("Comparison Operator");
+            }
+            
+            terminal = typeList.get(index++); //can be identifer or assignment
+            if ( ! (terminal.equals("Identifier") || terminal.equals("Number Literal")) ) {
+                Util.printParsingFaile("Identifer or Literal");
+            }
+    
+            terminal = tokenList.get(index++);
+            if ( !terminal.equals(")") ) {
+                Util.printParsingFaile(")");
+            } 
+
+        }
 
         return blockValidator(index) + 1;
     }
@@ -242,7 +240,7 @@ public class GrammarVlidator {
             terminal = typeList.get(index++);
 
             if (!terminal.equals("Identifier")){
-                System.out.println(terminal);
+
                 Util.printParsingFaile("Identifier", index);
             }
 
@@ -262,7 +260,6 @@ public class GrammarVlidator {
                     Util.printParsingFaile("Identifer or Number Literal");
                 }
 
-                System.out.println( "TokenList:" +  tokenList.get(index) );
                 if ( Tokens.ARTH_OPERATORS.contains(tokenList.get(index)) ) {
                     index++;
                 } else {

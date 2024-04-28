@@ -46,8 +46,6 @@ public class SmallLexer{
        predefiningState();
 
         splitIntoToken(fileContents);
-
-        Util.print(tokensList, typesList);
     }   
 
     public void splitIntoToken(String fileContents) {

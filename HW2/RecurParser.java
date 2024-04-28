@@ -7,7 +7,10 @@ public class RecurParser {
         smallLexer.runLexer(args);
 
         GrammarVlidator grammarVlidator = new GrammarVlidator(smallLexer.getTokensList(), smallLexer.getTypesList());
-        grammarVlidator.programValidator();
+        
+        if (grammarVlidator.programValidator() ) {
+           System.out.println("Parsing OK"); 
+        }
     }
 
 }
