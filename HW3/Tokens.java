@@ -41,14 +41,14 @@ public class Tokens {
          for (char delimiter : delimiters) {
              TOKEN_DELIMITER.add(delimiter);
          }
-         Collections.unmodifiableList(DIGIT_List); 
+         Collections.unmodifiableList(TOKEN_DELIMITER); 
      }
     
      public static final List<String> OPERATORS = 
-        Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==", "+", "-", "*", "/", "(", ")", ";", ",", "&&", "||", "&", "|", "!");
+        Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==", "+", "-", "*", "/", "(", ")", ";", ",", "&&", "||", "&", "|", "!", "++");
 
     public static final List<String> DECLAR_KEYWORD = 
-        Arrays.asList("int", "float", "double");
+        Arrays.asList("int", "float", "double", "integer");
  
     public static final List<String> COMPARISON_OPERATOR = 
         Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==");

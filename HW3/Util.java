@@ -35,83 +35,66 @@ public class Util {
     }
 
     public static ArrayList<String> getTokens(String fileLine) {
-
         ArrayList<String> tokensList = new ArrayList<>();
-
-        String tokens = "";
+        StringBuilder currentToken = new StringBuilder();
         String line = fileLine.trim();
-        String lookahead = "";
 
-        for ( int i = 0 ; i < line.length() ; i++) {
+        for (int i = 0; i < line.length(); i++) {
+            char currentChar = line.charAt(i);
 
-            if ( ((Character)line.charAt(i)).equals('\"') ) {
-
-                if ( line.indexOf('\"', i+1) == -1 ) {
-
-                    tokens = line.substring(i);
-
-                    if (tokens.length() != 0)
-                        tokensList.add(tokens);
-                        
-                    tokens = "";
-                    break;
-                }
-
-                tokens = line.substring(i, line.indexOf('\"', i+1) + 1);
-                
-                i = line.indexOf('\"', i+1);
-
-                if (tokens.length() != 0)
-                    tokensList.add(tokens);
-
-                tokens = "";
-
-                
-            } else if ( ((Character)line.charAt(i)).equals(' ')) {
-
-                if (tokens.length() != 0)
-                    tokensList.add(tokens);
-
-                tokens = "";
-
-            } else if (  Tokens.OPERATORS.contains( String.valueOf(line.charAt(i)) ) ) {
-
-                if (tokens.length() != 0)
-                    tokensList.add(tokens);
-
-                tokens = "";
-                lookahead = "";
-                
-                if (i != line.length() - 1)
-                    lookahead = String.valueOf(line.charAt(i)) + String.valueOf(line.charAt(i+1));
-
-                if ( lookahead.equals("--") ) {
-
-                    tokens = line.substring(i);
-                    if (tokens.length() != 0)
-                        tokensList.add(tokens);
-                    
-                    tokens = "";
-                    break;
-                }
-
-                if ( Tokens.OPERATORS.contains(lookahead)) {
-                    i = i+1;
-                    tokensList.add(lookahead);
-                } else {
-                    tokensList.add( String.valueOf(line.charAt(i)) );
-                }
-            
-            }  else {
-                tokens = tokens + line.charAt(i);
+            if (currentChar == '\"') {
+                i = processQuotedString(line, tokensList, i);
+            } else if (Character.isWhitespace(currentChar)) {
+                addToken(tokensList, currentToken.toString());
+                currentToken.setLength(0);
+            } else if (Tokens.OPERATORS.contains(String.valueOf(currentChar))) {
+                i = processOperator(line, tokensList, currentToken, i);
+            } else {
+                currentToken.append(currentChar);
             }
-
         }
 
-        if (tokens.length() != 0)
-            tokensList.add(tokens);
-
+        addToken(tokensList, currentToken.toString());
         return tokensList;
+    }
+
+    private static int processQuotedString(String line, ArrayList<String> tokensList, int startIndex) {
+        int endIndex = line.indexOf('\"', startIndex + 1);
+        if (endIndex == -1) {
+            tokensList.add(line.substring(startIndex));
+            return line.length(); // End loop
+        }
+        tokensList.add(line.substring(startIndex, endIndex + 1));
+        return endIndex;
+    }
+
+    private static int processOperator(String line, ArrayList<String> tokensList, StringBuilder currentToken, int currentIndex) {
+        addToken(tokensList, currentToken.toString());
+        currentToken.setLength(0);
+        
+        String lookahead = "";
+        if (currentIndex < line.length() - 1) {
+            lookahead = line.substring(currentIndex, currentIndex + 2);
+        }
+
+        if (lookahead.equals("--")) {
+            tokensList.add(line.substring(currentIndex));
+            return line.length(); // End loop
+        }
+
+        if (Tokens.OPERATORS.contains(lookahead)) {
+            tokensList.add(lookahead);
+            return currentIndex + 1;
+        }
+
+        tokensList.add(String.valueOf(line.charAt(currentIndex)));
+        return currentIndex;
+    }
+
+    private static void addToken(ArrayList<String> tokensList, String token) {
+        if (!token.isEmpty()) {
+            tokensList.add(token);
+        }
     }
 
 

@@ -40,7 +40,12 @@ public class SpecialTokens {
 
             // Arithmatic Operations
         } else if (tempChar.equals('+')) {
-            return "Addition Operator";
+            if (token.length() == 1) {
+                return "Addition Operator";
+            } else {
+                if ( ((Character)token.charAt(1)).equals('+') )  
+                    return "Increment Operator";
+            } 
         } else if (tempChar.equals('-')) {
             return "Subtraction Operator";
         } else if (tempChar.equals('*')) {
