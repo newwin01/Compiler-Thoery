@@ -20,6 +20,7 @@ public class SymbolTable {
         keywordHashMap.put("for", 10);
         keywordHashMap.put("display", 11); //newly added
         keywordHashMap.put("integer", 12); //newly added
+        keywordHashMap.put("break", 13); //newly added
     }
 
     public static void addSymbolTable(String tokens) {

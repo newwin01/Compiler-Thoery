@@ -62,13 +62,15 @@ public class SmallLexer{
 
             for (String token : spliitTokenList) {
 
-                tokensList.add(token);
-
                 if (Tokens.OPERATORS.contains(token))
                     types = SpecialTokens.getSpecialTokens(token);
-                else 
+                else{
                     types = determineState(token);
+                    if (types.equals("comment")) continue;
+                } 
+                    
                 typesList.add(types);
+                tokensList.add(token);
 
             }
         }
@@ -101,7 +103,7 @@ public class SmallLexer{
                 if ( SymbolTable.keywordHashMap.containsKey(token) )
                     return "Keyword";
                 else {
-                    SymbolTable.addSymbolTable(token);
+                    
                     return "Identifier";
                 }
 

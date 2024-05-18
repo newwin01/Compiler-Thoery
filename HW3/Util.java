@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Util {
 
@@ -110,6 +111,100 @@ public class Util {
             return null;
         }
         return fileContents.toString();
+    }
+
+
+    public static Stack<String> pushStack (Stack<String> stack, String[] array) {
+
+
+        for (int i = array.length-1 ; i >= 0 ; i--) {
+            stack.push(array[i]);
+        }
+
+        return stack;
+
+    }
+
+    public static void printStack (Stack<String> stack) {
+
+        System.out.println(stack);
+
+
+    }
+
+    /**
+     * True when is nonterminal
+     */
+    public static boolean checkNonterminal (String token) {
+
+        char firstChar = token.charAt(0);
+
+        if (Character.isLowerCase(firstChar)) 
+            return true;
+
+        if (Tokens.ALL_OPERATOR.contains(token))
+            return true;
+
+        return false;
+    }
+
+    public static boolean match(String expected, String current) {
+
+        if (expected.equals(current)) 
+            return true;
+
+        return false;
+    }
+
+    public static String returnTypeList(ArrayList<String> tokenList, ArrayList<String> typeList, int index) {
+
+        String buffer;
+
+
+        if (typeList.get(index).equals("Identifier"))
+            return "Identifier";
+
+        if (typeList.get(index).equals("String Literal")) 
+            return "String Literal";
+
+        if (typeList.get(index).equals("Number Literal") )
+            return "Number Literal";
+
+        buffer = tokenList.get(index);
+
+
+
+        return buffer;
+    }
+
+    public static boolean checkSpecialToken(String token, String type) {
+
+
+        if ( token.equals("IDENTIFIER") ) {
+
+            if ( type.equals("Identifier") ) {
+                return true;
+            } 
+
+        } 
+
+        if ( token.equals("NUMBER") ) {
+
+            if ( type.equals("Number Literal") ) {
+                return true;
+            } 
+
+        } 
+
+        if ( token.equals("STRING") ) {
+
+            if ( type.equals("String Literal") ) {
+                return true;
+            } 
+
+        } 
+
+        return false;
     }
 
 }

@@ -43,7 +43,10 @@ public class Tokens {
          }
          Collections.unmodifiableList(TOKEN_DELIMITER); 
      }
-    
+
+     public static final List<String> ALL_OPERATOR = 
+     Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==", "+", "-", "*", "/", "(", ")", ";", ",", "&&", "||", "&", "|", "!", "++", "<", ">", "=", "<=", ">=", "!=", "==", "+", "-", "*", "/", ",");
+
      public static final List<String> OPERATORS = 
         Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==", "+", "-", "*", "/", "(", ")", ";", ",", "&&", "||", "&", "|", "!", "++");
 
