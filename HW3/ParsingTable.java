@@ -46,12 +46,18 @@ public class ParsingTable {
         stmtRules.put("end", new String[]{" "});
         PARSING_TABLE.put("STMT", stmtRules);
 
+        Map<String, String[]> equalSignRule = new HashMap<>();
+        equalSignRule.put("=", new String[]{"=" , "ASSIGNED" , "ASSIGN_PRIME"});
+        equalSignRule.put(";", new String[]{" "});
+        equalSignRule.put(",", new String[]{" "});
+        PARSING_TABLE.put("EQUAL", equalSignRule);
+
         Map<String, String[]> assignRule = new HashMap<>();
-        assignRule.put("Identifier", new String[]{"IDENTIFIER", "=" , "ASSIGNED" , "ASSIGN_PRIME"});
+        assignRule.put("Identifier", new String[]{"IDENTIFIER", "EQUAL" , "ASSIGN_PRIME"});
         PARSING_TABLE.put("ASSIGN", assignRule);
 
         Map<String, String[]> assignPrimeRule = new HashMap<>();
-        assignPrimeRule.put(",", new String[]{",","IDENTIFIER", "=", "ASSIGNED", "ASSIGN_PRIME"}); //or eps -> follow set ;
+        assignPrimeRule.put(",", new String[]{",","IDENTIFIER", "EQUAL", "ASSIGN_PRIME"}); //or eps -> follow set ;
         assignPrimeRule.put(";", new String[]{" "}); //or eps -> follow set ;
         PARSING_TABLE.put("ASSIGN_PRIME", assignPrimeRule);
 
@@ -138,17 +144,20 @@ public class ParsingTable {
 
         Map<String, String[]> ifElseRule = new HashMap<>();
         ifElseRule.put("else_if", new String[]{"else_if", "(", "COMPARISON_STMT", ")", "BLOCK", "NEW_ELSE_IF"});
+        ifElseRule.put("end", new String[]{" "});
         //other epsilon requried
         PARSING_TABLE.put("ELSE_IF_STMT", ifElseRule);
 
         Map<String, String[]> newIfElseRule = new HashMap<>();
         newIfElseRule.put("else_if", new String[]{"else_if", "(", "COMPARISON_STMT", ")", "BLOCK", "NEW_ELSE_IF"});
         newIfElseRule.put("else", new String[]{" "});
+        newIfElseRule.put("end", new String[]{" "});
         //other epsilon requried
         PARSING_TABLE.put("NEW_ELSE_IF", newIfElseRule);
 
         Map<String, String[]> elseRule = new HashMap<>();
         elseRule.put("else", new String[]{"else", "BLOCK"});
+        elseRule.put("end", new String[]{" "});
         //other epsilon requried
         PARSING_TABLE.put("ELSE_STMT", elseRule);
     }
