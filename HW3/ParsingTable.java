@@ -62,9 +62,7 @@ public class ParsingTable {
         PARSING_TABLE.put("ASSIGN_PRIME", assignPrimeRule);
 
         Map<String, String[]> assignedRule = new HashMap<>();
-        assignedRule.put(",", new String[]{" "}); //eps
         assignedRule.put("Number Literal", new String[]{"NUMORID", "ASSIGNED_PRIME"});
-        assignedRule.put(";", new String[]{" "}); //eps
         assignedRule.put("Identifier", new String[]{"NUMORID", "ASSIGNED_PRIME"}); //eps
         PARSING_TABLE.put("ASSIGNED", assignedRule);
 
@@ -144,7 +142,17 @@ public class ParsingTable {
 
         Map<String, String[]> ifElseRule = new HashMap<>();
         ifElseRule.put("else_if", new String[]{"else_if", "(", "COMPARISON_STMT", ")", "BLOCK", "NEW_ELSE_IF"});
+        ifElseRule.put("else", new String[]{" "});
         ifElseRule.put("end", new String[]{" "});
+        ifElseRule.put("Identifier", new String[]{" "});
+        ifElseRule.put("break", new String[]{" "});
+        ifElseRule.put("int", new String[]{" "});
+        ifElseRule.put("integer", new String[]{" "});
+        ifElseRule.put("print_line", new String[]{" "});
+        ifElseRule.put("display", new String[]{" "});
+        ifElseRule.put("for", new String[]{" "});
+        ifElseRule.put("while", new String[]{" "});
+
         //other epsilon requried
         PARSING_TABLE.put("ELSE_IF_STMT", ifElseRule);
 
@@ -152,12 +160,28 @@ public class ParsingTable {
         newIfElseRule.put("else_if", new String[]{"else_if", "(", "COMPARISON_STMT", ")", "BLOCK", "NEW_ELSE_IF"});
         newIfElseRule.put("else", new String[]{" "});
         newIfElseRule.put("end", new String[]{" "});
+        newIfElseRule.put("Identifier", new String[]{" "});
+        newIfElseRule.put("break", new String[]{" "});
+        newIfElseRule.put("int", new String[]{" "});
+        newIfElseRule.put("integer", new String[]{" "});
+        newIfElseRule.put("print_line", new String[]{" "});
+        newIfElseRule.put("display", new String[]{" "});
+        newIfElseRule.put("for", new String[]{" "});
+        newIfElseRule.put("while", new String[]{" "});
         //other epsilon requried
         PARSING_TABLE.put("NEW_ELSE_IF", newIfElseRule);
 
         Map<String, String[]> elseRule = new HashMap<>();
         elseRule.put("else", new String[]{"else", "BLOCK"});
         elseRule.put("end", new String[]{" "});
+        elseRule.put("Identifier", new String[]{" "});
+        elseRule.put("break", new String[]{" "});
+        elseRule.put("int", new String[]{" "});
+        elseRule.put("integer", new String[]{" "});
+        elseRule.put("print_line", new String[]{" "});
+        elseRule.put("display", new String[]{" "});
+        elseRule.put("for", new String[]{" "});
+        elseRule.put("while", new String[]{" "});
         //other epsilon requried
         PARSING_TABLE.put("ELSE_STMT", elseRule);
     }
