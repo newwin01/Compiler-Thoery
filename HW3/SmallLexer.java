@@ -6,6 +6,8 @@ public class SmallLexer{
     DFA commentDFA;
     DFA numberLiteralDFA;
     DFA stringLiteralDFA;
+    boolean declared = false;
+    boolean program = false;
 
     private ArrayList<String> tokensList = new ArrayList<>();
     private ArrayList<String> typesList = new ArrayList<>();
@@ -47,7 +49,7 @@ public class SmallLexer{
 
         splitIntoToken(fileContents);
 
-        Util.print(tokensList, typesList);
+        // Util.print(tokensList, typesList);
     }   
 
     public void splitIntoToken(String fileContents) {
@@ -72,8 +74,24 @@ public class SmallLexer{
                 typesList.add(types);
                 tokensList.add(token);
 
+                if (Tokens.DECLARE_OPERATORS.contains(token))
+                        declared = true;
+            
+                if (declared && types.equals("Identifier")) {
+
+                    SymbolTable.addSymbolTable(token);
+                }
+
+                if (declared && token.equals(";")) {
+
+                    declared = false;
+                }
+
             }
         }
+
+        int programIndex = tokensList.indexOf("program");
+        SymbolTable.addSymbolTable(tokensList.get(programIndex+1));
   
     }   
 

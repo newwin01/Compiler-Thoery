@@ -6,6 +6,8 @@ import java.util.Stack;
 public class LLParser {
 
     Stack<String> stack;
+    ArrayList<String> tokenList;
+    ArrayList<String> typeList;
 
 
     public static void main(String[] args) {
@@ -15,21 +17,24 @@ public class LLParser {
 
         LLParser llParser = new LLParser(smallLexer.getTokensList(), smallLexer.getTypesList());
 
+        llParser.runLLParser();
+
+        System.out.println("Parsing OK");
+
     }
 
 
     public LLParser(ArrayList<String> tokenList, ArrayList<String> typeList ) {
 
-        String matched = "";
+
+        this.tokenList = tokenList;
+        this.typeList = typeList;
         
         stack = new Stack<>();
 
         //Start
         stack.push("$");
         String[] tempRule;
-        String tempToken;
-        String buffer;
-        int index = 0;
 
         
         Map<String, String[]> rules;
@@ -41,33 +46,44 @@ public class LLParser {
             tempRule = rules.get("program");
             stack = Util.pushStack(stack, tempRule);
         }
+
+        Util.printStack(stack);
         
+    }
+
+    public void runLLParser() {
+
+        String tempToken;
+        String buffer;
+        int index = 0;
+
+        Map<String, String[]> rules;
+        String[] tempRule;
+
 
         while ( !stack.lastElement().equals("$") ) {
 
             tempToken = stack.lastElement();
+            
+            if (index >= tokenList.size()) {
 
-            if (tempToken == " ") {
-                stack.pop();
-                continue;
-            } 
+                buffer = Util.pullOutFirstTerminal(stack);
+                System.err.println("Keyword " + buffer + " not matched");
+                System.out.println("Parsing failed");
+                System.exit(-1);
 
-
-            Util.printStack(stack); 
-
-            System.out.println("Temp token: " + tempToken); 
+            }
 
             buffer = Util.returnTypeList(tokenList, typeList, index);
-            System.out.println("Buffer: " + buffer);
             
-            if ( Util.checkNonterminal(tempToken) ) {
+            if ( Util.checkTerminal(tempToken) ) {
                 
                 if (!Util.match(tempToken, buffer) ) {
+                    System.err.println("Keyword spelling error");
                     System.out.println("Parsing failed");
                     System.exit(-1);
-                } else { //TODO: Delete
-                    matched = matched + " " +  buffer;
-                    System.out.println("Good Matched "+ matched);
+                } else { 
+                    System.out.println("[MATCHED] " + tempToken +  " - " + tokenList.get(index));
                 }
 
                 index++;
@@ -78,17 +94,33 @@ public class LLParser {
                 stack.pop();
 
                 if ( Util.checkSpecialToken(tempToken, typeList.get(index)) ) {
-                    matched = matched + " " +  buffer;
-                    System.out.println("Good Matched " + matched);
+
+                    if (typeList.get(index) == "Identifier" && !SymbolTable.identiferHashMap.containsKey(tokenList.get(index))) {
+
+                        if (Util.checkKeywordSpelling(tokenList.get(index))) {
+                            System.err.println("Keyword Spelling Error");
+                        } else {
+                            System.err.println(tokenList.get(index) + " Not Declared");
+                        }
+                        System.exit(-1);
+
+                    }
+
+                    System.out.println("[MATCHED] " + tempToken +  " - " + tokenList.get(index));
                     index++;
                     continue;
                 } 
 
                 rules = ParsingTable.PARSING_TABLE.get(tempToken);
                 tempRule = rules.get(buffer);
+
+                if (tempRule[0].equals(" ")) continue;
+
                 stack = Util.pushStack(stack, tempRule);
+                // Util.printStack(stack); 
 
             }
+            Util.printStack(stack); 
             
         }
 

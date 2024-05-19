@@ -84,6 +84,7 @@ public class ParsingTable {
         Map<String, String[]> typeRules = new HashMap<>();
         typeRules.put("int", new String[]{"int"});
         typeRules.put("integer", new String[]{"integer"});
+        typeRules.put("Identifier", new String[]{" "});
         PARSING_TABLE.put("TYPE", typeRules);
 
         Map<String, String[]> numOrIDorStringRules = new HashMap<>();
@@ -168,7 +169,7 @@ public class ParsingTable {
         newIfElseRule.put("display", new String[]{" "});
         newIfElseRule.put("for", new String[]{" "});
         newIfElseRule.put("while", new String[]{" "});
-        //other epsilon requried
+         
         PARSING_TABLE.put("NEW_ELSE_IF", newIfElseRule);
 
         Map<String, String[]> elseRule = new HashMap<>();
@@ -182,7 +183,7 @@ public class ParsingTable {
         elseRule.put("display", new String[]{" "});
         elseRule.put("for", new String[]{" "});
         elseRule.put("while", new String[]{" "});
-        //other epsilon requried
+         
         PARSING_TABLE.put("ELSE_STMT", elseRule);
     }
 

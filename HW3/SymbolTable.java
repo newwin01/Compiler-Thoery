@@ -26,8 +26,14 @@ public class SymbolTable {
     public static void addSymbolTable(String tokens) {
 
         if (!identiferHashMap.containsKey(tokens))
-            identiferHashMap.put(tokens, keywordHashMap.size()+1);
+            identiferHashMap.put(tokens, identiferHashMap.size()+1);
 
+    }
+
+    public static void print() {
+        for (Map.Entry<String, Integer> entry : identiferHashMap.entrySet()) {
+            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+        }
     }
 
 }

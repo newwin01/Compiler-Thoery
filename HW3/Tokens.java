@@ -56,6 +56,7 @@ public class Tokens {
     public static final List<String> COMPARISON_OPERATOR = 
         Arrays.asList("<", ">", "=", "<=", ">=", "!=", "==");
 
-    public static final List<String> ARTH_OPERATORS = 
-        Arrays.asList("+", "-", "*", "/");
+    public static final List<String> ARTH_OPERATORS = Arrays.asList("+", "-", "*", "/");
+
+    public static final List<String> DECLARE_OPERATORS = Arrays.asList("int", "integer");
 }

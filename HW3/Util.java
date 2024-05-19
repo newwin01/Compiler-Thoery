@@ -127,15 +127,14 @@ public class Util {
 
     public static void printStack (Stack<String> stack) {
 
-        System.out.println(stack);
-
+        System.out.println("[GENERATE-stack] " + stack);
 
     }
 
     /**
      * True when is nonterminal
      */
-    public static boolean checkNonterminal (String token) {
+    public static boolean checkTerminal (String token) {
 
         char firstChar = token.charAt(0);
 
@@ -203,6 +202,32 @@ public class Util {
             } 
 
         } 
+
+        return false;
+    }
+
+    public static String pullOutFirstTerminal(Stack<String> stack) {
+
+        String buffer = "";
+
+        while (true) {
+            buffer = stack.pop();
+            if (Util.checkTerminal(buffer)) {
+                return buffer;
+            }
+        }
+
+    }
+
+    public static boolean checkKeywordSpelling(String keyword) {
+
+
+        for (String key : SymbolTable.keywordHashMap.keySet()) {
+
+            if (keyword.contains(key)) 
+                return true;
+
+        }
 
         return false;
     }
