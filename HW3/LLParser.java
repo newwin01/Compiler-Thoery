@@ -3,7 +3,7 @@ import java.util.Map;
 import java.util.Stack;
 
 
-public class LLParser {
+public class LLparser {
 
     Stack<String> stack;
     ArrayList<String> tokenList;
@@ -15,7 +15,7 @@ public class LLParser {
         SmallLexer smallLexer = new SmallLexer();
         smallLexer.runLexer(args);
 
-        LLParser llParser = new LLParser(smallLexer.getTokensList(), smallLexer.getTypesList());
+        LLparser llParser = new LLparser(smallLexer.getTokensList(), smallLexer.getTypesList());
 
         llParser.runLLParser();
 
@@ -24,7 +24,7 @@ public class LLParser {
     }
 
 
-    public LLParser(ArrayList<String> tokenList, ArrayList<String> typeList ) {
+    public LLparser(ArrayList<String> tokenList, ArrayList<String> typeList ) {
 
 
         this.tokenList = tokenList;
