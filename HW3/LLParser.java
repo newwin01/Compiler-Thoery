@@ -102,6 +102,7 @@ public class LLParser {
                         } else {
                             System.err.println(tokenList.get(index) + " Not Declared");
                         }
+                        System.out.println("Parsing failed");
                         System.exit(-1);
 
                     }
