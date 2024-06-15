@@ -775,19 +775,15 @@ public class LRparser {
         smallLexer.getTokensList().add("$");
         smallLexer.getTypesList().add("");
 
-        // for (int i = 0 ; i < smallLexer.getTokensList().size() ; i++) {
         for (int i = 0 ; i < smallLexer.getTokensList().size() ; i++) {
 
             currentState = Integer.parseInt(stack.peek());
-            System.out.println(currentState);
 
             if (currentState == -1) break;
            
             type = smallLexer.getTypesUsingIndex(i);
             token = smallLexer.getTokensUsingIndex(i);
 
-
-            System.out.println(token);
 
             if (token == "$" && currentState == 1) {
                 System.out.println("Accept");
@@ -809,10 +805,7 @@ public class LRparser {
                     nextState = ParsingTable.getReduceToken(currentState, token);
                 }
                 
-                System.out.println(nextState);
                 reducedNonterminal = reduce(nextState);
-                System.out.println(reducedNonterminal);
-
                 currentState = Integer.parseInt(stack.peek());
 
                 stack.push(reducedNonterminal);
@@ -820,6 +813,10 @@ public class LRparser {
                 stack.push(String.valueOf(nextState));
 
                 System.out.println(stack);
+
+                if (nextState == -1) {
+                    System.out.println("Parsing error");
+                }
    
                 i--;
                 continue;
