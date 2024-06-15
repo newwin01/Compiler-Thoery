@@ -6,7 +6,6 @@ import java.util.Stack;
 
 public class Util {
 
-
     public static void printParsingFaile(String missingToken, int index) {
 
         System.err.println("Parsing Failed");
@@ -123,113 +122,6 @@ public class Util {
 
         return stack;
 
-    }
-
-    public static void printStack (Stack<String> stack) {
-
-        System.out.println("[GENERATE-stack] " + stack);
-
-    }
-
-    /**
-     * True when is nonterminal
-     */
-    public static boolean checkTerminal (String token) {
-
-        char firstChar = token.charAt(0);
-
-        if (Character.isLowerCase(firstChar)) 
-            return true;
-
-        if (Tokens.ALL_OPERATOR.contains(token))
-            return true;
-
-        return false;
-    }
-
-    public static boolean match(String expected, String current) {
-
-        if (expected.equals(current)) 
-            return true;
-
-        return false;
-    }
-
-    public static String returnTypeList(ArrayList<String> tokenList, ArrayList<String> typeList, int index) {
-
-        String buffer;
-
-
-        if (typeList.get(index).equals("Identifier"))
-            return "Identifier";
-
-        if (typeList.get(index).equals("String Literal")) 
-            return "String Literal";
-
-        if (typeList.get(index).equals("Number Literal") )
-            return "Number Literal";
-
-        buffer = tokenList.get(index);
-
-
-
-        return buffer;
-    }
-
-    public static boolean checkSpecialToken(String token, String type) {
-
-
-        if ( token.equals("IDENTIFIER") ) {
-
-            if ( type.equals("Identifier") ) {
-                return true;
-            } 
-
-        } 
-
-        if ( token.equals("NUMBER") ) {
-
-            if ( type.equals("Number Literal") ) {
-                return true;
-            } 
-
-        } 
-
-        if ( token.equals("STRING") ) {
-
-            if ( type.equals("String Literal") ) {
-                return true;
-            } 
-
-        } 
-
-        return false;
-    }
-
-    public static String pullOutFirstTerminal(Stack<String> stack) {
-
-        String buffer = "";
-
-        while (true) {
-            buffer = stack.pop();
-            if (Util.checkTerminal(buffer)) {
-                return buffer;
-            }
-        }
-
-    }
-
-    public static boolean checkKeywordSpelling(String keyword) {
-
-
-        for (String key : SymbolTable.keywordHashMap.keySet()) {
-
-            if (keyword.contains(key)) 
-                return true;
-
-        }
-
-        return false;
     }
 
 }

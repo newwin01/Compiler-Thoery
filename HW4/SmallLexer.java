@@ -49,7 +49,7 @@ public class SmallLexer{
 
         splitIntoToken(fileContents);
 
-        Util.print(tokensList, typesList); //TODO:Debug
+        // Util.print(tokensList, typesList); //TODO:Debug
     }   
 
     public void splitIntoToken(String fileContents) {
